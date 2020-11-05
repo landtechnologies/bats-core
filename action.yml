@@ -16,9 +16,10 @@ runs:
   steps:
     - name: bats-core
       run: |
-        git clone https://github.com/bats-core/bats-core.git $HOME/bats-core && cd $HOME/bats-core
-        git checkout ${{ inputs.version }}
-        sudo ./install.sh /usr/local
+        git clone https://github.com/bats-core/bats-core.git $HOME/bats-core
+        
+        # use a subprocess to install so that we don't affect the current working directory path - https://askubuntu.com/a/409247
+        (cd $HOME/bats-core && git checkout ${{ inputs.version }} && sudo ./install.sh /usr/local)
 
         if [ -n "${{ inputs.directory }}" ]; then
           cd ${{ inputs.directory }}
